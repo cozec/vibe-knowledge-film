@@ -7,6 +7,7 @@
 engine/
   vk.js        核心：时间助手、Frame（画线画字画光）、三套底、出帧（辉光 + 颗粒）
   vk-kit.js    每条片都用的件：字幕、片名卡、年份栏、章节标、仪表、骰子、闪、暗一下……
+  vk-math.js   数学讲解片的件（window.KIT）：坐标、误差填充、好用区间、记分板、嵌套公式（分数/根号）、3D 曲面、二阶拟合。见 references/math.md
   index.html   页面模板（new_film.py 会拷进工程）
   render.py    逐帧截图 → ffmpeg；也负责静帧、拼图、事件表、预览
   audio.py     按事件表合成声音，或垫一首现成配乐

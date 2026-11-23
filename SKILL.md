@@ -206,6 +206,7 @@ python engine/render.py <工程目录> --jobs 4           # 全片，4 路并行
 | `references/analysis.md` | 四条参考片的结构、节奏、制作痕迹（外观和技术层面） |
 | `references/prompts.md` | 逆向出的提示词：完整 brief、分步提示词、返工话术 |
 | `references/engine.md` | 引擎 API、命令、写法、坑 |
-| `engine/` | `vk.js` `vk-kit.js` `render.py` `audio.py` `get_fonts.py` |
+| `references/math.md` | 有旁白的数学讲解片：图当仪表（误差、区间、记分板、变绿的位数）、公式排版（分数、根号、字号门槛）、3D 曲面和二阶拟合、按词点亮、数字验算、审片清单。件在 `engine/vk-math.js` |
+| `engine/` | `vk.js` `vk-kit.js` `vk-math.js`（数学仪表，见 `references/math.md`） `render.py` `audio.py` `get_fonts.py` |
 | `scripts/new_film.py` | 建工程：`index.html` + 一份没有画面的 `film.js` 骨架 |
 | `examples/` | 看别人怎么做过一次，不是零件库。`fold_C`（夜曲，《折叠》开头 33 秒）和 `pigeon_B`（寓言，《鸽子的迷信》开头 33 秒）：自己题目的样片，各带分镜表；`fold_old_vs_new.jpg`：同一段内容的两版对照；两段对照参考片做的复刻；一张货架图；`look_*.jpg` 是各自的拼图 |
