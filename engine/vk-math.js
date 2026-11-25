@@ -19,9 +19,12 @@ function mtext(fr, str, x, y, o = {}) {
   while ((m = re.exec(str))) { if (m.index > i) segs.push([str.slice(i, m.index), 0]); segs.push([m[2], m[1] === '^' ? 1 : -1]); i = re.lastIndex; }
   if (i < str.length) segs.push([str.slice(i), 0]);
   const S = o.size || 48, so = s => Object.assign({}, o, { size: s ? S * .58 : S, align: 'l' }, s && o.supFont ? { font: o.supFont } : {});
-  const ws = segs.map(([t, s]) => fr.measure(t, so(s)) + (s ? S * .04 : 0)), tot = ws.reduce((p, q) => p + q, 0), al = o.align || 'c';
+  const ws = segs.map(([t, s]) => fr.measure(t, so(s)) + (s ? S * .04 : 0)), al = o.align || 'c';
+  /* a superscript right after a subscript (x_{old}^{2}) stacks over it instead of following it */
+  const stk = k => k > 0 && segs[k][1] === 1 && segs[k - 1][1] === -1;
+  const adv = ws.map((w, k) => stk(k) ? Math.max(0, w - ws[k - 1]) : w), tot = adv.reduce((p, q) => p + q, 0);
   let cx = al === 'c' ? x - tot / 2 : al === 'r' ? x - tot : x;
-  segs.forEach(([t, s], k) => { fr.text(t, cx + (s ? S * .02 : 0), y + (s === 1 ? -S * .42 : s === -1 ? S * .2 : 0), so(s)); cx += ws[k]; });
+  segs.forEach(([t, s], k) => { const x0 = stk(k) ? cx - adv[k - 1] : cx; fr.text(t, x0 + (s ? S * .02 : 0), y + (s === 1 ? -S * .42 : s === -1 ? S * .2 : 0), so(s)); cx += adv[k]; });
   return tot;
 }
 const COL = { REF: '#E9EDF3', FAKE: '#FFD36E', ERR: '#6E52B5', OK: '#9BF07A', FAC: '#FF4FA8', VAR: '#7CC4FF', DIM: '#5E6B77', AX: '#3E4A58', SOFT: '#AEB8C2', RED: '#FF5A6A', ORANGE: '#FF9E40' };
@@ -142,7 +145,7 @@ function magnifier(fr, cx, cy, r, tx, ty, a, label, draw) {
   if (a <= .003) return;
   fr.line(tx, ty, cx + (tx - cx) * r / Math.hypot(tx - cx, ty - cy), cy + (ty - cy) * r / Math.hypot(tx - cx, ty - cy), { w: 1.2, color: COL.SOFT, a: .6 * a });
   fr.circle(cx, cy, r, { fill: '#05080C', a: .92 * a });
-  fr.g({ a, clip: [cx - r, cy - r, 2 * r, 2 * r] }, () => draw());
+  fr.g({ a }, () => { fr.x.beginPath(); fr.x.arc(cx, cy, r, 0, Math.PI * 2); fr.x.clip(); draw(); });   /* round clip: nothing pokes out of the lens */
   fr.circle(cx, cy, r, { color: COL.SOFT, w: 2, a });
   if (label) fr.text(label, cx - r - 14, cy + 8, { font: 'mono', size: 20, color: COL.SOFT, align: 'r', a });
 }
