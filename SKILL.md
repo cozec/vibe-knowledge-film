@@ -209,4 +209,7 @@ python engine/render.py <工程目录> --jobs 4           # 全片，4 路并行
 | `references/math.md` | 有旁白的数学讲解片：图当仪表（误差、区间、记分板、变绿的位数）、公式排版（分数、根号、字号门槛）、3D 曲面和二阶拟合、按词点亮、数字验算、审片清单。件在 `engine/vk-math.js` |
 | `engine/` | `vk.js` `vk-kit.js` `vk-math.js`（数学仪表，见 `references/math.md`） `render.py` `audio.py` `get_fonts.py` |
 | `scripts/new_film.py` | 建工程：`index.html` + 一份没有画面的 `film.js` 骨架 |
+| `scripts/new_math_film.py` | 有旁白的数学片建工程（模板 `scripts/math_template/`）：标准目录、cues 骨架、字幕 + 片尾 + 测验，打印简报，不用再翻旧工程 |
+| `scripts/finish.sh` | 一次做完 `--det`、渲染、音效、混音和 QC（`qc_film.py`）：`finish.sh projects/<slug> <名字> [--clip A B \| --mix-only]`，放后台跑 |
+| `cutaway/src/vibe_package.py` | 上传包一次出齐（配置 `cutaway/results/<ID>/package.py`），见 `references/math.md` 第 7 步 |
 | `examples/` | 看别人怎么做过一次，不是零件库。`fold_C`（夜曲，《折叠》开头 33 秒）和 `pigeon_B`（寓言，《鸽子的迷信》开头 33 秒）：自己题目的样片，各带分镜表；`fold_old_vs_new.jpg`：同一段内容的两版对照；两段对照参考片做的复刻；一张货架图；`look_*.jpg` 是各自的拼图 |
