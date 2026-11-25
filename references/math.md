@@ -62,14 +62,15 @@ const pulse = (tw, keep) => ss(t, tw - .06, tw + .1) * (1 - (1 - keep) * ss(t, t
 
 ## 从零做一条（照 taylor_study v2 的流程，已过审）
 
-模板是 `projects/taylor_study/`：复制 `src/`（`cues.py` `build_timeline.py` `mix.sh`）和 `film/`（`common.js` `film.js` `index.html`，`kit.js` 换成 `engine/vk-math.js`），章节文件 `ch_*.js` 重写。
+建工程用一条命令：`python3 scripts/new_math_film.py <slug> --title "片名" --id <ID> [--from ellipse]`。它建好标准目录，从 `--from` 工程（默认 `projects/ellipse/`，最新过审的一条）复制 `build_timeline.py` `mix.sh` `common.js` `mascot.js`，`kit.js` 取 `engine/vk-math.js`，再从 `scripts/math_template/` 放进 `cues.py` 骨架、`film.js`（字幕、片尾卡、26 秒音乐尾声）、`ch_a.js`（钩子空壳）、`ch_quiz.js`、`ch_cameo.js`，写好 `docs/plan.md` 骨架、进度记录，并把 `topics.md` 那一行标成 in progress。画面一行都不复制：章节文件 `ch_*.js` 每条片重写。
 
 1. **文案**：`src/cues.py` 一行一句，`(id, 字幕, 句前停顿, {say, marks})`。约 150 词/分钟。写完把每个数在 python 里算一遍。
 2. **配音和时间轴**：`build_timeline.py` 用 Kokoro 合成，写出 `film/timing.js`（`TL`，含 `m` 词时间）和 `narration/narration.wav`。改文案后重跑，场景自动重排时间。
 3. **场景**：每章一个文件，场景按 `SB.A(id)` 定位。先挑"观众盯着看的那个量"，再画。公式一律用 `formula`，按字号门槛定大小，先给每个公式划好自己的带子。
 4. **自审静帧**（交给审片人之前）：`render.py film --stills t1,t2,…`，每个场景取最挤的一刻和每个公式第一次出现的一刻，原尺寸看，逐条过下面的清单。
-5. **渲染和合成**：`caffeinate -dimsu render.py film --jobs 2`，再 `audio.py --wav-only`、`src/mix.sh`。合成后查 −14 LUFS、`blackdetect`、总时长。
+5. **渲染和合成**：`scripts/finish.sh projects/<slug> <slug>_v1`（放后台跑，自带 caffeinate）一次做完 `--det`、`--jobs 2`、`--events`、`audio.py --wav-only`、`src/mix.sh`（尾声起点从 `timing.js` 自动算），再出 QC：1920×1080、30 fps、−14 LUFS、真峰值、无黑场、≥ 8:00 且和时间轴对得上、旁白段和尾声段的响度、配乐垫底和人声的差，外加一张 `film/review/<名字>_sheet.jpg`。最后一行是 `FINISH_OK` 或 `FINISH_FAILED`。开头样片用 `--clip 0 34`，只改了音效或混音用 `--mix-only`。
 6. 新版本另存为 `output/<slug>_v2.mp4`，旧版留着对比。
+7. **上传包**：在 `cutaway/results/<ID>/package.py` 写配置（标题、章节、简介、标签、候选帧、缩略图、置顶问题，字段见 `cutaway/src/vibe_package.py` 的文件头），先 `vibe_package.py <ID> --frames` 看候选帧，再 `vibe_package.py <ID>` 一次出齐硬链接视频、srt、简介、标签、缩略图、`pinned.txt`、`qc.json` 和 `UPLOAD.md`。
 
 ## 审片清单（第一轮审片的意见）
 
